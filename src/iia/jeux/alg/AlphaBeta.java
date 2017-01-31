@@ -23,7 +23,7 @@ public class AlphaBeta implements AlgoJeu {
 
      /**  L'heuristique utilisée par l'algorithme
       */
-   private Heuristique h;
+    private Heuristique h;
 
     /** Le joueur Min
      *  (l'adversaire) */

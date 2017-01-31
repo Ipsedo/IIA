@@ -66,11 +66,13 @@ public class NegAlphaBeta implements AlgoJeu {
 		CoupJeu meilleurCoup = coupsPossibles.get(0);
 		coupsPossibles.remove(0);
 		tmpP.joue(this.joueurMax, meilleurCoup);
-		alpha = -this.negAB(this.profMax - 1, tmpP, -beta, -alpha, -1);
+		alpha = Math.max(alpha, -this.negAB(this.profMax - 1, tmpP, -beta, -alpha, -1));
 		for(CoupJeu c : coupsPossibles){
 			tmpP = p.copy();
 			tmpP.joue(this.joueurMax, c);
+			System.out.println("Initial ---------------  alpha = "+alpha+", beta = "+beta);
 			int newVal = -this.negAB(this.profMax - 1, tmpP, -beta, -alpha, -1);
+			System.out.println(newVal);
 			if(newVal > alpha){
 				meilleurCoup = c;
 				alpha = newVal;
@@ -82,15 +84,19 @@ public class NegAlphaBeta implements AlgoJeu {
 	}
 	
 	private int negAB(int pronf, PlateauJeu plat, int alpha, int beta, int parité){
-		if(pronf == 0 || plat.finDePartie()){
+		System.out.println("negAB, alpha : "+alpha+", beta : "+beta);
+		Joueur joueur = parité > 0 ? this.joueurMax : this.joueurMin;
+		if(pronf <= 0 || plat.finDePartie()){
 			this.nbfeuilles++;
-			return parité * this.h.eval(plat, parité > 0 ? this.joueurMax : this.joueurMin);
+			return parité * this.h.eval(plat, joueur);
 		}else{
-			for(CoupJeu c : plat.coupsPossibles(parité > 0 ? this.joueurMax : this.joueurMin)){
+			for(CoupJeu c : plat.coupsPossibles(joueur)){
 				this.nbnoeuds++;
 	    		PlateauJeu tmp = plat.copy();
-	    		tmp.joue(parité > 0 ? this.joueurMax : this.joueurMin, c);
-	    		alpha = Math.max(alpha, -negAB(pronf - 1, tmp, -beta, -alpha, -parité));
+	    		tmp.joue(joueur, c);
+	    		int tmpA = -negAB(pronf - 1, tmp, -beta, -alpha, -parité);
+	    		System.out.println(" DANS negAB, tmp Alpha : "+tmpA+", Alpha : "+alpha+", beta : " + beta+", parité : "+parité);
+	    		alpha = Math.max(alpha, tmpA);
 	    		if(alpha >= beta){
 	    			return beta;
 	    		}
