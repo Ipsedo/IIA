@@ -88,7 +88,6 @@ public class PlateauAwale implements PlateauJeu {
 	}
 
 	public void joue(Joueur j, CoupJeu c) {
-		// TODO Auto-generated method stub
 		CoupAwale cA = (CoupAwale) c;
 		if(j.equals(PlateauAwale.joueurBlanc)){
 			int currInd = cA.getIndiceTrou();
@@ -176,15 +175,11 @@ public class PlateauAwale implements PlateauJeu {
 	}
 
 	public boolean finDePartie() {
-		if(this.gainsJoueurBlanc >= 25 || this.gainsJoueurBlanc >= 25){
-			return true;
-		}
 		int compteur=0;
 		for(int i=0; i < this.plateau.length; i++){
 			compteur += this.plateau[i];
 		}
-		if(compteur <= 6) return true;
-		else return false;
+		return this.gainsJoueurNoir >= 25 || this.gainsJoueurBlanc >= 25 || compteur <= 6;
 	}
 
 	public PlateauJeu copy() {

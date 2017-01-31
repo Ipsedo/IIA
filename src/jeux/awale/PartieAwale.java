@@ -24,9 +24,9 @@ public class PartieAwale {
 
         AlgoJeu AlgoJoueur[] = new AlgoJeu[2];
         AlgoJoueur[0] = new AlphaBeta(HeuristiquesAwale.hblanc, jBlanc, jNoir); // Il faut remplir la méthode !!!
-        AlgoJoueur[1] = new AlphaBeta(HeuristiquesAwale.hnoir, jNoir, jBlanc);  // Il faut remplir la méthode !!!
+        AlgoJoueur[1] = new AlphaBeta(HeuristiquesAwale.hnoir, jNoir, jBlanc,8);  // Il faut remplir la méthode !!!
 
-        System.out.println("TD IIA n.3 - Algorithmes pour les Jeux");
+        System.out.println("TD IIA n.4 - Algorithmes pour les Jeux");
         System.out.println("Etat Initial du plateau de jeu:");
 
         boolean jeufini = false;
