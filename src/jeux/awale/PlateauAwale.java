@@ -19,21 +19,37 @@ public class PlateauAwale implements PlateauJeu {
 	
 	private int[] plateau = new int[RANGEES * TROUS];
 	
+	private int gainsJoueurBlanc;
+	private int gainsJoueurNoir;
+	
 	public PlateauAwale(){
 		for(int i=0; i < RANGEES * TROUS; i++){
 			this.plateau[i] = 4;
 		}
+		this.gainsJoueurBlanc = 0;
+		this.gainsJoueurNoir = 0;
 	}
 	
 	private PlateauAwale(int[] depuis){
 		for(int i=0; i < RANGEES * TROUS; i++){
 			this.plateau[i] = depuis[i];
 		}
+		this.gainsJoueurBlanc = 0;
+		this.gainsJoueurNoir = 0;
 	}
 
 	public ArrayList<CoupJeu> coupsPossibles(Joueur j) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<CoupJeu> lesCoupsPossibles = new ArrayList<CoupJeu>();
+		if(j.equals(joueurBlanc)){
+			for(int i=0; i < this.plateau.length-6; i++){  //regarde la premiere partie du plateau
+				if(this.plateau[i] > 0) lesCoupsPossibles.add(new CoupAwale(i)); // on peut jouer
+			}
+		}else{
+			for(int i=6; i < this.plateau.length; i++){ //regarde la deuxieme partie du plateau
+				if(this.plateau[i] > 0) lesCoupsPossibles.add(new CoupAwale(i)); // on peut jouer
+			}
+		}
+		return lesCoupsPossibles;
 	}
 
 	public void joue(Joueur j, CoupJeu c) {
@@ -101,8 +117,15 @@ public class PlateauAwale implements PlateauJeu {
 	}
 
 	public boolean finDePartie() {
-		// TODO Auto-generated method stub
-		return false;
+		if(this.gainsJoueurBlanc==25 || this.gainsJoueurNoir==25){
+			return true;
+		}
+		int compteur=0;
+		for(int i=0; i < this.plateau.length; i++){
+			compteur += this.plateau[i];
+		}
+		if(compteur <= 6) return true;
+		else return false;
 	}
 
 	public PlateauJeu copy() {
