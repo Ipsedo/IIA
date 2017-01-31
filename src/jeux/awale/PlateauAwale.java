@@ -13,14 +13,13 @@ public class PlateauAwale implements PlateauJeu {
 	
 	/** Le joueur qui joue "dans la première rangée" */
 	private static Joueur joueurBlanc;
+	private int gainsJoueurBlanc;
 
 	/** Le joueur qui joue "dans la deuxième rangée" */
 	private static Joueur joueurNoir;
+	private int gainsJoueurNoir;
 	
 	private int[] plateau = new int[RANGEES * TROUS];
-	
-	private int gainsJoueurBlanc;
-	private int gainsJoueurNoir;
 	
 	public PlateauAwale(){
 		for(int i=0; i < RANGEES * TROUS; i++){
@@ -37,19 +36,23 @@ public class PlateauAwale implements PlateauJeu {
 		this.gainsJoueurBlanc = 0;
 		this.gainsJoueurNoir = 0;
 	}
+	
+	public static void setJoueurs(Joueur j1, Joueur j2){
+		joueurBlanc = j1;
+		joueurNoir = j2;
+	}
 
 	public ArrayList<CoupJeu> coupsPossibles(Joueur j) {
-		ArrayList<CoupJeu> lesCoupsPossibles = new ArrayList<CoupJeu>();
-		if(j.equals(joueurBlanc)){
-			for(int i=0; i < this.plateau.length-6; i++){  //regarde la premiere partie du plateau
-				if(this.plateau[i] > 0) lesCoupsPossibles.add(new CoupAwale(i)); // on peut jouer
-			}
-		}else{
-			for(int i=6; i < this.plateau.length; i++){ //regarde la deuxieme partie du plateau
-				if(this.plateau[i] > 0) lesCoupsPossibles.add(new CoupAwale(i)); // on peut jouer
+		// TODO Auto-generated method stub
+		/* utiliser coupValide(Joueur j, CoupJeu c) ? */
+		ArrayList<CoupJeu> listeCoups = new ArrayList<CoupJeu>();
+		for(int i=0; i<TROUS * RANGEES; i++){
+			if(this.coupValide(j, new CoupAwale(i))){
+				listeCoups.add(new CoupAwale(i));
 			}
 		}
-		return lesCoupsPossibles;
+		
+		return listeCoups;
 	}
 
 	public void joue(Joueur j, CoupJeu c) {
@@ -67,7 +70,7 @@ public class PlateauAwale implements PlateauJeu {
 					nbGraine--;
 					currInd++;
 				}
-				if(currInd > TROUS * RANGEES){
+				if(currInd >= TROUS * RANGEES){
 					currInd = 0;
 				}
 			}
@@ -78,11 +81,11 @@ public class PlateauAwale implements PlateauJeu {
 				}
 			}
 			while(currInd < TROUS * RANGEES && currInd >= 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
-				this.nbPointBlanc += this.plateau[currInd];
-				currInd--;
 				if(!capturePasOK){
+					this.gainsJoueurBlanc += this.plateau[currInd];
 					this.plateau[currInd] = 0;
 				}
+				currInd--;
 			}
 		}else{
 			int currInd = cA.getIndiceTrou();
@@ -96,7 +99,7 @@ public class PlateauAwale implements PlateauJeu {
 					nbGraine--;
 					currInd++;
 				}
-				if(currInd > TROUS * RANGEES){
+				if(currInd >= TROUS * RANGEES){
 					currInd = 0;
 				}
 			}
@@ -107,17 +110,17 @@ public class PlateauAwale implements PlateauJeu {
 				}
 			}
 			while(currInd >= 0 && currInd < 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
-				this.nbPointBlanc += this.plateau[currInd];
-				currInd--;
 				if(!capturePasOK){
+					this.gainsJoueurBlanc += this.plateau[currInd];
 					this.plateau[currInd] = 0;
 				}
+				currInd--;
 			}
 		}
 	}
 
 	public boolean finDePartie() {
-		if(this.gainsJoueurBlanc==25 || this.gainsJoueurNoir==25){
+		if(this.gainsJoueurBlanc==25 || this.gainsJoueurBlanc==25){
 			return true;
 		}
 		int compteur=0;
@@ -135,11 +138,30 @@ public class PlateauAwale implements PlateauJeu {
 
 	public boolean coupValide(Joueur j, CoupJeu c) {
 		CoupAwale cA = (CoupAwale) c;
-		if(j.equals(this.joueurBlanc)){
-			return cA.getIndiceTrou() < 6 && this.plateau[cA.getIndiceTrou()] > 0;
+		if(j.equals(PlateauAwale.joueurBlanc)){
+			return cA.getIndiceTrou() >= 0 && cA.getIndiceTrou() < 6 && this.plateau[cA.getIndiceTrou()] > 0;
 		}else{
-			return cA.getIndiceTrou() >= 6 && this.plateau[cA.getIndiceTrou()] > 0;
+			return cA.getIndiceTrou() < TROUS * RANGEES && cA.getIndiceTrou() >= 6 && this.plateau[cA.getIndiceTrou()] > 0;
 		}
 	}
-
+	
+	public int getPointBlanc(){
+		return this.gainsJoueurBlanc;
+	}
+	
+	public int getPointNoir(){
+		return this.gainsJoueurNoir;
+	}
+	
+	public String toString(){
+		String res = "|";
+		for(int i = TROUS * RANGEES - 1; i >= 6; i--){
+			res += (this.plateau[i] > 9 ? this.plateau[i] : "0"+this.plateau[i])+"|";
+		}
+		res += "\n|";
+		for(int i=0; i<6; i++){
+			res += (this.plateau[i] > 9 ? this.plateau[i] : "0"+this.plateau[i])+"|";
+		}
+		return res;
+	}
 }
