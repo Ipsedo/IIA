@@ -58,14 +58,7 @@ public class PlateauAwale implements PlateauJeu {
 						listeCoups.add(new CoupAwale(i));
 					}
 				}
-				if(listeCoups.size() == 0){
-					for(int i=0; i<6; i++){
-						if(this.coupValide(j, new CoupAwale(i))){
-							listeCoups.add(new CoupAwale(i));
-						}
-					}
-				}
-			}else{
+			}else if(listeCoups.size() == 0){
 				for(int i=0; i<6; i++){
 					if(this.coupValide(j, new CoupAwale(i))){
 						listeCoups.add(new CoupAwale(i));
@@ -79,18 +72,11 @@ public class PlateauAwale implements PlateauJeu {
 			}
 			if(famine){
 				for(int i = 6; i < TROUS * RANGEES; i++){
-					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i > TROUS * RANGEES){
+					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i >= TROUS * RANGEES){
 						listeCoups.add(new CoupAwale(i));
 					}
 				}
-				if(listeCoups.size() == 0){
-					for(int i = 6; i < TROUS * RANGEES; i++){
-						if(this.coupValide(j, new CoupAwale(i))){
-							listeCoups.add(new CoupAwale(i));
-						}
-					}
-				}
-			}else{
+			}else if(listeCoups.size() == 0){
 				for(int i = 6; i < TROUS * RANGEES; i++){
 					if(this.coupValide(j, new CoupAwale(i))){
 						listeCoups.add(new CoupAwale(i));
@@ -171,7 +157,7 @@ public class PlateauAwale implements PlateauJeu {
 			}
 			while(currInd >= 0 && currInd < 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
 				if(!capturePasOK){
-					this.gainsJoueurBlanc += this.plateau[currInd];
+					this.gainsJoueurNoir += this.plateau[currInd];
 					this.plateau[currInd] = 0;
 				}
 				currInd--;

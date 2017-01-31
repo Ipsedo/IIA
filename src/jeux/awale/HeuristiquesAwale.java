@@ -11,7 +11,7 @@ public class HeuristiquesAwale {
 		
 		public int eval(PlateauJeu p, Joueur j){
 			PlateauAwale tmpP = (PlateauAwale) p;
-			return tmpP.getPointBlanc() * 10 + tmpP.getNbTrousPrenableNoir() - tmpP.getNbTrousPrenableBlanc();
+			return tmpP.getPointBlanc() + tmpP.getNbTrousPrenableNoir() - tmpP.getNbTrousPrenableBlanc();
 		}
 	};
 
@@ -19,7 +19,7 @@ public class HeuristiquesAwale {
 	
 		public int eval(PlateauJeu p, Joueur j){
 			PlateauAwale tmpP = (PlateauAwale) p;
-			return tmpP.getPointNoir() * 10 + tmpP.getNbTrousPrenableBlanc() - tmpP.getNbTrousPrenableNoir();
+			return tmpP.getPointNoir() + tmpP.getNbTrousPrenableBlanc() - tmpP.getNbTrousPrenableNoir();
 		}
 	};
 }
