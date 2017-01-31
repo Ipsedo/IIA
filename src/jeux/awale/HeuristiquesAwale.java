@@ -10,18 +10,16 @@ public class HeuristiquesAwale {
 	public static  Heuristique hblanc = new Heuristique(){
 		
 		public int eval(PlateauJeu p, Joueur j){
-			/*A COMPLETER*/
 			PlateauAwale tmpP = (PlateauAwale) p;
-			return tmpP.getPointBlanc();
+			return tmpP.getPointBlanc() * 10 + tmpP.getNbTrousPrenableNoir() - tmpP.getNbTrousPrenableBlanc();
 		}
 	};
 
 	public static  Heuristique hnoir = new Heuristique(){
 	
 		public int eval(PlateauJeu p, Joueur j){
-			/*A COMPLETER*/
 			PlateauAwale tmpP = (PlateauAwale) p;
-			return tmpP.getPointNoir();
+			return tmpP.getPointNoir() * 10 + tmpP.getNbTrousPrenableBlanc() - tmpP.getNbTrousPrenableNoir();
 		}
 	};
 }
