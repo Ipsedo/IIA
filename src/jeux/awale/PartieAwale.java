@@ -65,6 +65,7 @@ public class PartieAwale {
                 PlateauAwale tmpP = (PlateauAwale) plateauCourant;
                 System.out.println("Plateau Final");
                 System.out.println(plateauCourant);
+		System.out.println("Le joueur " + lesJoueurs[1 - jnum] + " a gagné !!");
                 jeufini = true;
 
             }
