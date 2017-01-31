@@ -38,10 +38,47 @@ public class PlateauAwale implements PlateauJeu {
 
 	public void joue(Joueur j, CoupJeu c) {
 		// TODO Auto-generated method stub
+		CoupAwale cA = (CoupAwale) c;
 		if(j.equals(this.joueurBlanc)){
-			
+			int currInd = cA.getIndiceTrou();
+			int nbGraine = this.plateau[currInd];
+			this.plateau[currInd] = 0;
+			while(nbGraine > 0){
+				if(currInd == cA.getIndiceTrou()){
+					currInd++;
+				}else{
+					this.plateau[currInd] += 1;
+					nbGraine--;
+					currInd++;
+				}
+				if(currInd > TROUS * RANGEES){
+					currInd = 0;
+				}
+			}
+			while(currInd < TROUS * RANGEES && currInd >= 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
+				this.nbPointBlanc += this.plateau[currInd];
+				currInd--;
+			}
 		}else{
-			
+			int currInd = cA.getIndiceTrou();
+			int nbGraine = this.plateau[currInd];
+			this.plateau[currInd] = 0;
+			while(nbGraine > 0){
+				if(currInd == cA.getIndiceTrou()){
+					currInd++;
+				}else{
+					this.plateau[currInd] += 1;
+					nbGraine--;
+					currInd++;
+				}
+				if(currInd > TROUS * RANGEES){
+					currInd = 0;
+				}
+			}
+			while(currInd >= 0 && currInd < 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
+				this.nbPointBlanc += this.plateau[currInd];
+				currInd--;
+			}
 		}
 	}
 
