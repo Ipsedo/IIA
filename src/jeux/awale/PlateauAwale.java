@@ -153,6 +153,22 @@ public class PlateauAwale implements PlateauJeu {
 		return this.gainsJoueurNoir;
 	}
 	
+	public int getNbTrousPrenableBlanc(){
+		int nbRes = 0;
+		for(int i = 0; i < 6; i++){
+			nbRes = (this.plateau[i] == 1 || this.plateau[i] == 2) ? nbRes + 1 : nbRes;
+		}
+		return nbRes;
+	}
+	
+	public int getNbTrousPrenableNoir(){
+		int nbRes = 0;
+		for(int i = 6; i < TROUS * RANGEES; i++){
+			nbRes = (this.plateau[i] == 1 || this.plateau[i] == 2) ? nbRes + 1 : nbRes;
+		}
+		return nbRes;
+	}
+	
 	public String toString(){
 		String res = "|";
 		for(int i = TROUS * RANGEES - 1; i >= 6; i--){
