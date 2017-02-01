@@ -42,41 +42,32 @@ public class PlateauAwale implements PlateauJeu {
 		joueurNoir = j2;
 	}
 
-	public ArrayList<CoupJeu> coupsPossibles(Joueur j) {
-		// TODO Auto-generated method stub
-	
+	public ArrayList<CoupJeu> coupsPossibles(Joueur j) {	
 		ArrayList<CoupJeu> listeCoups = new ArrayList<CoupJeu>();
-		
 		if(j.equals(PlateauAwale.joueurBlanc)){
-			boolean famine = true;
-			for(int i=6; i<TROUS * RANGEES; i++){
-				famine &= this.plateau[i] == 0;
-			}
-			if(famine){
+			if(this.famine(joueurNoir)){
 				for(int i = 0; i < 6; i++){
-					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i > 5){
+					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i >= 6){
 						listeCoups.add(new CoupAwale(i));
 					}
 				}
-			}else if(listeCoups.size() == 0){
-				for(int i=0; i<6; i++){
+			}
+			if(listeCoups.isEmpty()){
+				for(int i = 0; i < 6; i++){
 					if(this.coupValide(j, new CoupAwale(i))){
 						listeCoups.add(new CoupAwale(i));
 					}
 				}
 			}		
 		}else{
-			boolean famine = true;
-			for(int i=0; i<6; i++){
-				famine &= this.plateau[i] == 0;
-			}
-			if(famine){
+			if(this.famine(joueurBlanc)){
 				for(int i = 6; i < TROUS * RANGEES; i++){
 					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i >= TROUS * RANGEES){
 						listeCoups.add(new CoupAwale(i));
 					}
 				}
-			}else if(listeCoups.size() == 0){
+			}
+			if(listeCoups.isEmpty()){
 				for(int i = 6; i < TROUS * RANGEES; i++){
 					if(this.coupValide(j, new CoupAwale(i))){
 						listeCoups.add(new CoupAwale(i));
@@ -89,83 +80,46 @@ public class PlateauAwale implements PlateauJeu {
 
 	public void joue(Joueur j, CoupJeu c) {
 		CoupAwale cA = (CoupAwale) c;
-		if(j.equals(PlateauAwale.joueurBlanc)){
-			int currInd = cA.getIndiceTrou();
-			int nbGraine = this.plateau[currInd];
-			this.plateau[currInd] = 0;
-			while(nbGraine > 0){
-				if(currInd == cA.getIndiceTrou()){
+		int currInd = cA.getIndiceTrou();
+		int nbGraine = this.plateau[currInd];
+		this.plateau[currInd] = 0;
+		while(nbGraine > 0){
+			if(currInd == cA.getIndiceTrou()){
+				currInd++;
+			}else{
+				this.plateau[currInd] += 1;
+				nbGraine--;
+				if(nbGraine !=0 ){
 					currInd++;
-				}else{
-					this.plateau[currInd] += 1;
-					nbGraine--;
-					if(nbGraine !=0 ){
-						currInd++;
-					}
-				}
-				if(currInd >= TROUS * RANGEES){
-					currInd = 0;
 				}
 			}
-			boolean capturePasOK = true;
-			if(currInd == TROUS * RANGEES - 1){
-				for(int i = currInd; i >= 6; i--){
-					capturePasOK &= (this.plateau[i] == 2 || this.plateau[i] == 3);
-				}
+			if(currInd >= TROUS * RANGEES){
+				currInd = 0;
 			}
-			while(currInd < TROUS * RANGEES && currInd >= 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
-				if(!capturePasOK){
+		}
+		if(j.equals(PlateauAwale.joueurBlanc)){
+			if(!this.capturePasOk(PlateauAwale.joueurBlanc, currInd)){
+				while(currInd < TROUS * RANGEES && currInd >= 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
 					this.gainsJoueurBlanc += this.plateau[currInd];
 					this.plateau[currInd] = 0;
+					currInd--;
 				}
-				currInd--;
 			}
-			boolean famine = true;
-			for(int i=6; i<TROUS * RANGEES; i++){
-				famine &= this.plateau[i] == 0;
-			}
-			if(famine){
+			if(this.famine(joueurNoir)){
 				for(int i=0; i<TROUS * RANGEES; i++){
 					this.gainsJoueurNoir += this.plateau[i];
 					this.plateau[i] = 0;
 				}
 			}
 		}else{
-			int currInd = cA.getIndiceTrou();
-			int nbGraine = this.plateau[currInd];
-			this.plateau[currInd] = 0;
-			while(nbGraine > 0){
-				if(currInd == cA.getIndiceTrou()){
-					currInd++;
-				}else{
-					this.plateau[currInd] += 1;
-					nbGraine--;
-					if(nbGraine !=0 ){
-						currInd++;
-					}
-				}
-				if(currInd >= TROUS * RANGEES){
-					currInd = 0;
-				}
-			}
-			boolean capturePasOK = true;
-			if(currInd == 5){
-				for(int i = currInd; i >= 0; i--){
-					capturePasOK &= (this.plateau[i] == 2 || this.plateau[i] == 3);
-				}
-			}
-			while(currInd >= 0 && currInd < 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
-				if(!capturePasOK){
+			if(!this.capturePasOk(PlateauAwale.joueurNoir, currInd)){
+				while(currInd >= 0 && currInd < 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
 					this.gainsJoueurNoir += this.plateau[currInd];
 					this.plateau[currInd] = 0;
+					currInd--;
 				}
-				currInd--;
 			}
-			boolean famine = true;
-			for(int i=0; i<6; i++){
-				famine &= this.plateau[i] == 0;
-			}
-			if(famine){
+			if(this.famine(joueurBlanc)){
 				for(int i=0; i<TROUS * RANGEES; i++){
 					this.gainsJoueurBlanc += this.plateau[i];
 					this.plateau[i] = 0;
@@ -173,17 +127,45 @@ public class PlateauAwale implements PlateauJeu {
 			}
 		}
 	}
+	
+	private boolean famine(Joueur j){
+		boolean famine = true;
+		if(j.equals(PlateauAwale.joueurBlanc)){
+			for(int i=0; i<6; i++){
+				famine &= this.plateau[i] == 0;
+			}
+		}else{
+			for(int i=6; i<TROUS * RANGEES; i++){
+				famine &= this.plateau[i] == 0;
+			}
+		}
+		return famine;
+	}
+	
+	private boolean capturePasOk(Joueur j, int currInd){
+		boolean res = true;
+		if(j.equals(joueurBlanc)){
+			for(int i = currInd; i >= 6; i--){
+				res &= (this.plateau[i] == 2 || this.plateau[i] == 3);
+			}
+			return res && currInd == TROUS * RANGEES - 1;
+		}else{
+			for(int i = currInd; i >= 0; i--){
+				res &= (this.plateau[i] == 2 || this.plateau[i] == 3);
+			}
+			return res && currInd == 5;
+		}
+	}
 
 	public boolean finDePartie() {
-		int compteur=0;
-		for(int i=0; i < this.plateau.length; i++){
+		int compteur = 0;
+		for(int i = 0; i < this.plateau.length; i++){
 			compteur += this.plateau[i];
 		}
 		return this.gainsJoueurNoir >= 25 || this.gainsJoueurBlanc >= 25 || compteur <= 6;
 	}
 
 	public PlateauJeu copy() {
-		// TODO Auto-generated method stub
 		return new PlateauAwale(this.plateau);
 	}
 
@@ -199,7 +181,7 @@ public class PlateauAwale implements PlateauJeu {
 	public int getNbTrousPrenableBlanc(){
 		int nbRes = 0;
 		for(int i = 0; i < 6; i++){
-			nbRes = (this.plateau[i] == 1 || this.plateau[i] == 2) ? nbRes + 1 : nbRes;
+			nbRes += (this.plateau[i] == 1 || this.plateau[i] == 2) ? 1 : 0;
 		}
 		return nbRes;
 	}
@@ -207,7 +189,7 @@ public class PlateauAwale implements PlateauJeu {
 	public int getNbTrousPrenableNoir(){
 		int nbRes = 0;
 		for(int i = 6; i < TROUS * RANGEES; i++){
-			nbRes = (this.plateau[i] == 1 || this.plateau[i] == 2) ? nbRes + 1 : nbRes;
+			nbRes += (this.plateau[i] == 1 || this.plateau[i] == 2) ? 1 : 0;
 		}
 		return nbRes;
 	}

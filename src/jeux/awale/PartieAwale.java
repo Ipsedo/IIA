@@ -2,8 +2,6 @@ package jeux.awale;
 
 import iia.jeux.alg.AlgoJeu;
 import iia.jeux.alg.AlphaBeta;
-import iia.jeux.alg.Minimax;
-import iia.jeux.alg.NegAlphaBeta;
 import iia.jeux.modele.CoupJeu;
 import iia.jeux.modele.PlateauJeu;
 import iia.jeux.modele.joueur.Joueur;
@@ -62,10 +60,8 @@ public class PartieAwale {
                 jnum = 1 - jnum;
 
             } else {
-                PlateauAwale tmpP = (PlateauAwale) plateauCourant;
                 System.out.println("Plateau Final");
                 System.out.println(plateauCourant);
-		System.out.println("Le joueur " + lesJoueurs[1 - jnum] + " a gagné !!");
                 jeufini = true;
 
             }
