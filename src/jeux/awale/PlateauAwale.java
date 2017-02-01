@@ -203,7 +203,7 @@ public class PlateauAwale implements PlateauJeu {
 	}
 	
 	public String toString(){
-		String res = "|";
+		String res = "-------------------\n|";
 		for(int i = TROUS * RANGEES - 1; i >= TROUS; i--){
 			res += (this.plateau[i] > 9 ? this.plateau[i] : "0"+this.plateau[i])+"|";
 		}
@@ -212,7 +212,7 @@ public class PlateauAwale implements PlateauJeu {
 		for(int i=0; i < TROUS; i++){
 			res += (this.plateau[i] > 9 ? this.plateau[i] : "0"+this.plateau[i])+"|";
 		}
-		res += "\nBlanc : "+this.gainsJoueurBlanc+", Noir : "+this.gainsJoueurNoir+"\n";
+		res += "\n-------------------\nBlanc : "+this.gainsJoueurBlanc+", Noir : "+this.gainsJoueurNoir+"\n";
 		return res;
 	}
 }

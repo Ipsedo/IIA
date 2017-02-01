@@ -15,6 +15,6 @@ public class CoupAwale implements CoupJeu {
 	}
 	
 	public String toString(){
-		return "(rangé:"+this.indiceTrou/6+", trou"+(this.indiceTrou>5?this.indiceTrou-6:this.indiceTrou)+")";
+		return "(rangé:"+this.indiceTrou/6+", trou:"+(this.indiceTrou>5?this.indiceTrou-6:this.indiceTrou)+")";
 	}
 }
