@@ -18,14 +18,14 @@ public class PartieDominos {
 
         Joueur[] lesJoueurs = new Joueur[2];
 
-        lesJoueurs[1] = jBlanc;
-        lesJoueurs[0] = jNoir;
+        lesJoueurs[0] = jBlanc;
+        lesJoueurs[1] = jNoir;
 
 
 
         AlgoJeu AlgoJoueur[] = new AlgoJeu[2];
-        AlgoJoueur[1] = new Minimax(HeuristiquesDominos.hblanc, jBlanc, jNoir); // Il faut remplir la méthode !!!
-        AlgoJoueur[0] = new NegAlphaBeta(HeuristiquesDominos.hnoir, jNoir, jBlanc);  // Il faut remplir la méthode !!!
+        AlgoJoueur[0] = new AlphaBeta(HeuristiquesDominos.hblanc, jBlanc, jNoir); // Il faut remplir la méthode !!!
+        AlgoJoueur[1] = new AlphaBeta(HeuristiquesDominos.hnoir, jNoir, jBlanc);  // Il faut remplir la méthode !!!
 
         System.out.println("TD IIA n.3 - Algorithmes pour les Jeux");
         System.out.println("Etat Initial du plateau de jeu:");

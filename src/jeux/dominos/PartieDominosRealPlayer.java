@@ -1,6 +1,7 @@
 package jeux.dominos;
 
 import iia.jeux.alg.AlgoJeu;
+import iia.jeux.alg.AlphaBeta;
 import iia.jeux.alg.Minimax;
 import iia.jeux.alg.NegAlphaBeta;
 import iia.jeux.modele.CoupJeu;
@@ -22,7 +23,7 @@ public class PartieDominosRealPlayer {
         lesJoueurs[1] = jNoir;
         
         
-        AlgoJeu algoIA = new Minimax(HeuristiquesDominos.hblanc, jBlanc, jNoir); // Il faut remplir la méthode !!!
+        AlgoJeu algoIA = new AlphaBeta(HeuristiquesDominos.hblanc, jBlanc, jNoir); // Il faut remplir la méthode !!!
 
         System.out.println("TD IIA n.3 - Algorithmes pour les Jeux");
         System.out.println("Etat Initial du plateau de jeu:");

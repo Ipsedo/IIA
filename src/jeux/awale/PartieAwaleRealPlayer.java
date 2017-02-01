@@ -12,8 +12,13 @@ import java.util.Scanner;
 public class PartieAwaleRealPlayer {
 	public static void main(String[] args) {
 
-        Joueur jBlanc = new Joueur("Blanc");
+		Joueur jBlanc = new Joueur("Blanc");
         Joueur jNoir = new Joueur("Player");
+
+        Joueur[] lesJoueurs = new Joueur[2];
+        
+        lesJoueurs[0] = jBlanc;
+        lesJoueurs[1] = jNoir;
         
         AlgoJeu algoIA = new AlphaBeta(HeuristiquesAwale.hblanc, jBlanc, jNoir); // Il faut remplir la méthode !!!
 
@@ -35,34 +40,34 @@ public class PartieAwaleRealPlayer {
 
         while (!jeufini) {
             System.out.println("" + plateauCourant);
-            System.out.println("C'est au joueur " + (jnum == 0 ? jBlanc : jNoir) + " de jouer.");
+            System.out.println("C'est au joueur " + lesJoueurs[jnum] + " de jouer.");
             // Vérifie qu'il y a bien des coups possibles
             // Ce n'est pas tres efficace, mais c'est plus rapide... a écrire...
-            ArrayList<CoupJeu> lesCoupsPossibles = plateauCourant.coupsPossibles((jnum == 0 ? jBlanc : jNoir));
-            System.out.println("Coups possibles pour" + (jnum == 0 ? jBlanc : jNoir) + " : " + lesCoupsPossibles);
-            if (lesCoupsPossibles.size() > 0 && !plateauCourant.finDePartie() && jnum ==0 ) {
+            ArrayList<CoupJeu> lesCoupsPossibles = plateauCourant.coupsPossibles(lesJoueurs[jnum]);
+            System.out.println("Coups possibles pour" + lesJoueurs[jnum] + " : " + lesCoupsPossibles);
+            if (!plateauCourant.finDePartie()) {
                 // On écrit le plateau
+            	if(jnum == 0){
+            		// Lancement de l'algo de recherche du meilleur coup
+            		System.out.println("Recherche du meilleur coup avec l'algo " + lesJoueurs[jnum]);
+            		meilleurCoup = algoIA.meilleurCoup(plateauCourant);
+            		System.out.println("Coup joué : " + meilleurCoup + " par le joueur " + lesJoueurs[jnum]);
 
-                // Lancement de l'algo de recherche du meilleur coup
-                System.out.println("Recherche du meilleur coup avec l'algo " + jBlanc);
-                meilleurCoup = algoIA.meilleurCoup(plateauCourant);
-                System.out.println("Coup joué : " + meilleurCoup + " par le joueur " + jBlanc);
-
-                plateauCourant.joue(jBlanc, meilleurCoup);
-                // Le coup est effectivement joué
+            		plateauCourant.joue(lesJoueurs[jnum], meilleurCoup);
+            		// Le coup est effectivement joué
+            	}else{
+            		Scanner reader = new Scanner(System.in);
+                	System.out.println("Entrez une case [0;5] : ");
+                	int n = reader.nextInt();
+                	while(n < 0 || n > 5 || !plateauCourant.coupValide(lesJoueurs[jnum], new CoupAwale(n))){
+                		System.out.println("Entrez une case valide !");
+                		n = reader.nextInt();
+                	}
+                	System.out.println("Coup joué par "+lesJoueurs[jnum]+" : "+new CoupAwale(n));
+                	plateauCourant.joue(jNoir, new CoupAwale(n));
+            	}
                 jnum = 1 - jnum;
 
-            } else if(lesCoupsPossibles.size() > 0 && !plateauCourant.finDePartie() && jnum == 1 ){
-            	Scanner reader = new Scanner(System.in);
-            	System.out.println("Entrez une case [0;5] : ");
-            	int n = reader.nextInt();
-            	while(n < 0 || n > 5 || !plateauCourant.coupValide(jNoir, new CoupAwale(n))){
-            		System.out.println("Entrez une case valide !");
-            		n = reader.nextInt();
-            	}
-            	System.out.println("Coup joué par "+jNoir+" : "+new CoupAwale(n));
-            	plateauCourant.joue(jNoir, new CoupAwale(n));
-            	jnum = 1 - jnum;
             } else {
                 System.out.println("Plateau Final");
                 System.out.println(plateauCourant);
