@@ -46,14 +46,14 @@ public class PlateauAwale implements PlateauJeu {
 		ArrayList<CoupJeu> listeCoups = new ArrayList<CoupJeu>();
 		if(j.equals(PlateauAwale.joueurBlanc)){
 			if(this.famine(joueurNoir)){
-				for(int i = 0; i < 6; i++){
-					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i >= 6){
+				for(int i = 0; i < TROUS; i++){
+					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i >= TROUS){
 						listeCoups.add(new CoupAwale(i));
 					}
 				}
 			}
 			if(listeCoups.isEmpty()){
-				for(int i = 0; i < 6; i++){
+				for(int i = 0; i < TROUS; i++){
 					if(this.coupValide(j, new CoupAwale(i))){
 						listeCoups.add(new CoupAwale(i));
 					}
@@ -61,14 +61,14 @@ public class PlateauAwale implements PlateauJeu {
 			}		
 		}else{
 			if(this.famine(joueurBlanc)){
-				for(int i = 6; i < TROUS * RANGEES; i++){
+				for(int i = TROUS; i < TROUS * RANGEES; i++){
 					if(this.coupValide(j, new CoupAwale(i)) && this.plateau[i] + i >= TROUS * RANGEES){
 						listeCoups.add(new CoupAwale(i));
 					}
 				}
 			}
 			if(listeCoups.isEmpty()){
-				for(int i = 6; i < TROUS * RANGEES; i++){
+				for(int i = TROUS; i < TROUS * RANGEES; i++){
 					if(this.coupValide(j, new CoupAwale(i))){
 						listeCoups.add(new CoupAwale(i));
 					}
@@ -99,28 +99,28 @@ public class PlateauAwale implements PlateauJeu {
 		}
 		if(j.equals(PlateauAwale.joueurBlanc)){
 			if(!this.capturePasOk(PlateauAwale.joueurBlanc, currInd)){
-				while(currInd < TROUS * RANGEES && currInd >= 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
+				while(currInd < TROUS * RANGEES && currInd >= TROUS && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
 					this.gainsJoueurBlanc += this.plateau[currInd];
 					this.plateau[currInd] = 0;
 					currInd--;
 				}
 			}
 			if(this.famine(joueurNoir)){
-				for(int i=0; i<TROUS * RANGEES; i++){
+				for(int i=0; i < TROUS * RANGEES; i++){
 					this.gainsJoueurNoir += this.plateau[i];
 					this.plateau[i] = 0;
 				}
 			}
 		}else{
 			if(!this.capturePasOk(PlateauAwale.joueurNoir, currInd)){
-				while(currInd >= 0 && currInd < 6 && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
+				while(currInd >= 0 && currInd < TROUS && (this.plateau[currInd] == 2 || this.plateau[currInd] == 3)){
 					this.gainsJoueurNoir += this.plateau[currInd];
 					this.plateau[currInd] = 0;
 					currInd--;
 				}
 			}
 			if(this.famine(joueurBlanc)){
-				for(int i=0; i<TROUS * RANGEES; i++){
+				for(int i=0; i < TROUS * RANGEES; i++){
 					this.gainsJoueurBlanc += this.plateau[i];
 					this.plateau[i] = 0;
 				}
@@ -131,11 +131,11 @@ public class PlateauAwale implements PlateauJeu {
 	private boolean famine(Joueur j){
 		boolean famine = true;
 		if(j.equals(PlateauAwale.joueurBlanc)){
-			for(int i=0; i<6; i++){
+			for(int i=0; i < TROUS; i++){
 				famine &= this.plateau[i] == 0;
 			}
 		}else{
-			for(int i=6; i<TROUS * RANGEES; i++){
+			for(int i = TROUS; i < TROUS * RANGEES; i++){
 				famine &= this.plateau[i] == 0;
 			}
 		}
@@ -145,7 +145,7 @@ public class PlateauAwale implements PlateauJeu {
 	private boolean capturePasOk(Joueur j, int currInd){
 		boolean res = true;
 		if(j.equals(joueurBlanc)){
-			for(int i = currInd; i >= 6; i--){
+			for(int i = currInd; i >= TROUS; i--){
 				res &= (this.plateau[i] == 2 || this.plateau[i] == 3);
 			}
 			return res && currInd == TROUS * RANGEES - 1;
@@ -153,7 +153,7 @@ public class PlateauAwale implements PlateauJeu {
 			for(int i = currInd; i >= 0; i--){
 				res &= (this.plateau[i] == 2 || this.plateau[i] == 3);
 			}
-			return res && currInd == 5;
+			return res && currInd == TROUS - 1;
 		}
 	}
 
@@ -172,15 +172,15 @@ public class PlateauAwale implements PlateauJeu {
 	public boolean coupValide(Joueur j, CoupJeu c) {
 		CoupAwale cA = (CoupAwale) c;
 		if(j.equals(PlateauAwale.joueurBlanc)){
-			return cA.getIndiceTrou() >= 0 && cA.getIndiceTrou() < 6 && this.plateau[cA.getIndiceTrou()] > 0;
+			return cA.getIndiceTrou() >= 0 && cA.getIndiceTrou() < TROUS && this.plateau[cA.getIndiceTrou()] > 0;
 		}else{
-			return cA.getIndiceTrou() < TROUS * RANGEES && cA.getIndiceTrou() >= 6 && this.plateau[cA.getIndiceTrou()] > 0;
+			return cA.getIndiceTrou() < TROUS * RANGEES && cA.getIndiceTrou() >= TROUS && this.plateau[cA.getIndiceTrou()] > 0;
 		}
 	}
 	
 	public int getNbTrousPrenableBlanc(){
 		int nbRes = 0;
-		for(int i = 0; i < 6; i++){
+		for(int i = 0; i < TROUS; i++){
 			nbRes += (this.plateau[i] == 1 || this.plateau[i] == 2) ? 1 : 0;
 		}
 		return nbRes;
@@ -188,7 +188,7 @@ public class PlateauAwale implements PlateauJeu {
 	
 	public int getNbTrousPrenableNoir(){
 		int nbRes = 0;
-		for(int i = 6; i < TROUS * RANGEES; i++){
+		for(int i = TROUS; i < TROUS * RANGEES; i++){
 			nbRes += (this.plateau[i] == 1 || this.plateau[i] == 2) ? 1 : 0;
 		}
 		return nbRes;
@@ -204,12 +204,12 @@ public class PlateauAwale implements PlateauJeu {
 	
 	public String toString(){
 		String res = "|";
-		for(int i = TROUS * RANGEES - 1; i >= 6; i--){
+		for(int i = TROUS * RANGEES - 1; i >= TROUS; i--){
 			res += (this.plateau[i] > 9 ? this.plateau[i] : "0"+this.plateau[i])+"|";
 		}
 		res += "\n-------------------";
 		res += "\n|";
-		for(int i=0; i<6; i++){
+		for(int i=0; i < TROUS; i++){
 			res += (this.plateau[i] > 9 ? this.plateau[i] : "0"+this.plateau[i])+"|";
 		}
 		res += "\nBlanc : "+this.gainsJoueurBlanc+", Noir : "+this.gainsJoueurNoir+"\n";
