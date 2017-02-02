@@ -2,6 +2,7 @@ package jeux.awale;
 
 import iia.jeux.alg.AlgoJeu;
 import iia.jeux.alg.AlphaBeta;
+import iia.jeux.alg.NegAlphaBeta;
 import iia.jeux.modele.CoupJeu;
 import iia.jeux.modele.PlateauJeu;
 import iia.jeux.modele.joueur.Joueur;
@@ -21,8 +22,8 @@ public class PartieAwale {
         lesJoueurs[1] = jNoir;
 
         AlgoJeu AlgoJoueur[] = new AlgoJeu[2];
-        AlgoJoueur[0] = new AlphaBeta(HeuristiquesAwale.hblanc, jBlanc, jNoir,8); // Il faut remplir la méthode !!!
-        AlgoJoueur[1] = new AlphaBeta(HeuristiquesAwale.hnoir, jNoir, jBlanc);  // Il faut remplir la méthode !!!
+        AlgoJoueur[0] = new NegAlphaBeta(HeuristiquesAwale.hblanc, jBlanc, jNoir); // Il faut remplir la méthode !!!
+        AlgoJoueur[1] = new NegAlphaBeta(HeuristiquesAwale.hnoir, jNoir, jBlanc);  // Il faut remplir la méthode !!!
 
         System.out.println("TD IIA n.4 - Algorithmes pour les Jeux");
         System.out.println("Etat Initial du plateau de jeu:");
@@ -58,7 +59,6 @@ public class PartieAwale {
                 plateauCourant.joue(lesJoueurs[jnum], meilleurCoup);
                 // Le coup est effectivement joué
                 jnum = 1 - jnum;
-
             } else {
                 System.out.println("Plateau Final");
                 System.out.println(plateauCourant);

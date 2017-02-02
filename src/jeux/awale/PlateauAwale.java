@@ -194,6 +194,22 @@ public class PlateauAwale implements PlateauJeu {
 		return nbRes;
 	}
 	
+	public int getNbBarrageBlanc(){
+		int res = 0;
+		for(int i=0; i < TROUS; i++){
+			res += this.plateau[i] == 0 ? 1 : 0;
+		}
+		return res;
+	}
+	
+	public int getNbBarrageNoir(){
+		int res = 0;
+		for(int i=TROUS; i < TROUS * RANGEES; i++){
+			res += this.plateau[i] == 0 ? 1 : 0;
+		}
+		return res;
+	}
+	
 	public int getPointBlanc(){
 		return this.gainsJoueurBlanc;
 	}

@@ -1,7 +1,6 @@
 package iia.jeux.alg;
 
 import java.util.ArrayList;
-
 import iia.jeux.modele.CoupJeu;
 import iia.jeux.modele.PlateauJeu;
 import iia.jeux.modele.joueur.Joueur;
@@ -60,17 +59,16 @@ public class NegAlphaBeta implements AlgoJeu {
 		this.nbfeuilles = 0;
 		this.nbnoeuds = 0;
 		ArrayList<CoupJeu> coupsPossibles = p.coupsPossibles(this.joueurMax);
-		int alpha = Integer.MIN_VALUE;
-		int beta = Integer.MAX_VALUE;
+		int alpha = Integer.MIN_VALUE+1;
+		int beta = Integer.MAX_VALUE-1;
 	    PlateauJeu tmpP = p.copy();
 		CoupJeu meilleurCoup = coupsPossibles.get(0);
 		coupsPossibles.remove(0);
 		tmpP.joue(this.joueurMax, meilleurCoup);
-		alpha = Math.max(alpha, -this.negAB(this.profMax - 1, tmpP, -beta, -alpha, -1));
+		alpha = -this.negAB(this.profMax - 1, tmpP, -beta, -alpha, -1);
 		for(CoupJeu c : coupsPossibles){
 			tmpP = p.copy();
 			tmpP.joue(this.joueurMax, c);
-			System.out.println("Initial ---------------  alpha = "+alpha+", beta = "+beta);
 			int newVal = -this.negAB(this.profMax - 1, tmpP, -beta, -alpha, -1);
 			System.out.println(newVal);
 			if(newVal > alpha){
@@ -84,7 +82,6 @@ public class NegAlphaBeta implements AlgoJeu {
 	}
 	
 	private int negAB(int pronf, PlateauJeu plat, int alpha, int beta, int parité){
-		System.out.println("negAB, alpha : "+alpha+", beta : "+beta);
 		Joueur joueur = parité > 0 ? this.joueurMax : this.joueurMin;
 		if(pronf <= 0 || plat.finDePartie()){
 			this.nbfeuilles++;
@@ -95,7 +92,6 @@ public class NegAlphaBeta implements AlgoJeu {
 	    		PlateauJeu tmp = plat.copy();
 	    		tmp.joue(joueur, c);
 	    		int tmpA = -negAB(pronf - 1, tmp, -beta, -alpha, -parité);
-	    		System.out.println(" DANS negAB, tmp Alpha : "+tmpA+", Alpha : "+alpha+", beta : " + beta+", parité : "+parité);
 	    		alpha = Math.max(alpha, tmpA);
 	    		if(alpha >= beta){
 	    			return beta;
